@@ -7,7 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <ShareSDK/ShareSDK.h>
 
-@interface BGWLViewController : UIViewController
+@interface BGWLViewController : UIViewController<UITableViewDataSource,
+UITableViewDelegate>
+{
+@private
+    NSMutableDictionary *_infoDict;
+    ShareType _type;
+    SSUserFieldType _paramType;
+    NSInteger _flag;
+    NSString *_name;
+    BOOL _initialized;
+    
+    UITableView *_tableView;
+}
+
+- (IBAction)clickButtonLogin:(id)sender;
 
 @end

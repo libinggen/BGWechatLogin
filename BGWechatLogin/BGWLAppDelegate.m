@@ -7,14 +7,47 @@
 //
 
 #import "BGWLAppDelegate.h"
+#import "BGWLViewController.h"
+
+//添加ShareSDK和WeChatSDK头文件
+
+#import <ShareSDK/ShareSDK.h>
+#import "WXApi.h"
 
 @implementation BGWLAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    /**
+     注册SDK应用，此应用请到http://www.sharesdk.cn中进行注册申请。
+     此方法必须在启动时调用，否则会限制SDK的使用。
+     **/
+    [ShareSDK registerApp:@"783b9ac2495"];
+    
+    
+    /**
+     连接微信应用以使用相关功能，此应用需要引用WeChatConnection.framework和微信官方SDK
+     http://open.weixin.qq.com上注册应用，并将相关信息填写以下字段
+     **/
+    [ShareSDK connectWeChatWithAppId:@"wx4868b35061f87885"
+                           appSecret:@"64020361b8ec4c99936c0e3999a9f249"
+                           wechatCls:[WXApi class]];
+    
     return YES;
 }
+
+//由于SSO授权需要跳转到客户端进行授权验证，因此需要添加以下两个handleOpenURL:回调方法处理返回消息
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return [ShareSDK handleOpenURL:url wxDelegate:nil];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return [ShareSDK handleOpenURL:url sourceApplication:sourceApplication annotation:annotation wxDelegate:nil];
+}
+
 							
 - (void)applicationWillResignActive:(UIApplication *)application
 {
